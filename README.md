@@ -27,5 +27,3 @@ Este es un proyecto de prueba realizado en el curso **Desarrollo de una red soci
 12. Ejecuta `npm run dev` o `yarn dev`
 13. Abre la aplicación en el navegador
 14. Registra un nuevo usuario y ya puedes comenzar a utilizar la aplicación
-
-#### Todos los proyectos creados en los cursos de Aprendible están bajo la [licencia MIT](https://opensource.org/licenses/MIT).
