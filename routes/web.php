@@ -5,6 +5,10 @@ Route::view('/', 'welcome')->name('home');
 Route::get('canchas', 'CourtsController@index')->name('courtss.index')->middleware('auth');
 Route::get('canchas/{court}', 'CourtsController@show')->name('courts.show')->middleware('auth');
 
+Route::get('events/{court}/show', 'EventsController@show')->name('events.show')->middleware('auth');
+Route::post('events/{court}', 'EventsController@store')->name('events.store')->middleware('auth');
+Route::delete('events/{court}/{event}', 'EventsController@destroy')->name('events.destroy')->middleware('auth');
+Route::put('events/{court}/{event}', 'EventsController@update')->name('events.update')->middleware('auth');
 
 
 // Statuses routes

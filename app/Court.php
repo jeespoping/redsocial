@@ -34,6 +34,10 @@ class court extends Model
         return $this->hasMany(Photo::class);
     }
 
+    public function events(){
+        return $this->hasMany(Event::class);
+    }
+
     public function owner()
     {
         return $this->belongsTo(User::class, 'user_id');

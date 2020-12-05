@@ -26,6 +26,9 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
+        "@fullcalendar/core": "^5.4.0",
+        "@fullcalendar/daygrid": "^5.4.0",
+        "fullcalendar": "^5.4.0",
         "laravel-echo": "^1.5.3",
         "pusher-js": "^4.4.0"
     }

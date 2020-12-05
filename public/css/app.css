@@ -11105,10 +11105,6 @@ a.text-dark:focus {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
-.carousel-inner .item img {
-  width: 100%;
-}
-
 .user_card {
   height: 500px;
   width: 350px;
