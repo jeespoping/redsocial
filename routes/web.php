@@ -62,9 +62,13 @@ Route::group([
         Route::get('/', 'AdminController@index')->name('dashboard');
 
         Route::resource('courts', 'CourtsController', ['excepet' => 'show', 'as' => 'admin']);
+        Route::resource('championships', 'ChampionshipsController', ['excepet' => 'show', 'as' => 'admin']);
 
         Route::post('courts/{court}/photos', 'PhotosController@store')->name('admin.courts.photos.store');
         Route::delete('photos/{photo}', 'PhotosController@destroy')->name('admin.photos.destroy');
+
+        Route::post('championships/{championship}/photoos', 'PhotoosController@store')->name('admin.championships.photoos.store');
+        Route::delete('photoos/{photoo}', 'PhotoosController@destroy')->name('admin.photoos.destroy');
     });
 
 Route::auth();

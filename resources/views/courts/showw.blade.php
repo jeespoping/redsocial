@@ -59,10 +59,6 @@
                                     <label>Hora</label>
                                     <select name="start" id="start"  class="form-control" style="width: 100%;">
                                         <option value="">Selecciona una opcion</option>
-                                        <option value="6:00:00">6-7</option>
-                                        <option value="7:00:00">7-8</option>
-                                        <option value="8:00:00">8-9</option>
-                                        <option value="9:00:00">9-10</option>
                                     </select>
                                 </div>
 
@@ -108,6 +104,17 @@
 
                 dateClick:function (info){
 
+                    //FUNCION QUE DESACTIVA HORAS YA APARTADA
+                    @for($i = 6; $i < 24; $i++)
+                        $('#start option[value="{{$i<10?'0'.$i:$i}}:00:00"]').remove();
+                        document.getElementById("start").innerHTML += '<option value="{{ $i<10 ? '0'.$i : $i }}:00:00">{{$i}} - {{$i+1}}</option>'
+                    @endfor
+                    @foreach($court->events as $event)
+                        if (info.dateStr == '{{$event->start->format('Y-m-d')}}'){
+                            $('#start option[value="{{$event->start->format('H:i:s')}}"]').remove();
+                        }
+                    @endforeach
+
                     limpiarFormulario();
 
                     $('#txtFecha').val(info.dateStr)
@@ -116,9 +123,11 @@
                     $('#btnModificar').prop("disabled",true)
                     $('#btnBorrar').prop("disabled",true)
 
+
+
                     $('#exampleModal').modal('toggle');
-                    // calendar.addEvent({ title:"Evento x", date:info.dateStr, descripcion: "Partido amistoso"});
-                }, //crea un evento con un click
+
+                },
 
                 eventClick:function (info){
 
@@ -126,7 +135,10 @@
                     $('#btnModificar').prop("disabled",false)
                     $('#btnBorrar').prop("disabled",false)
 
-                    hora = info.event.start.getHours()+":00:00";
+                    hora = info.event.start.getHours()
+                    hora = (hora<10)?"0"+hora:hora
+                    hora = hora+":00:00";
+                    console.log(hora);
 
                     mes = info.event.start.getMonth()+1;
                     dia = info.event.start.getDate();
@@ -134,6 +146,21 @@
 
                     mes = (mes<10)?"0"+mes:mes;
                     dia = (dia<10)?"0"+dia:dia;
+
+                    convinado = anio+"-"+mes+"-"+dia;
+
+                    //actualizar modal
+                    @for($i = 6; $i < 24; $i++)
+                    $('#start option[value="{{$i<10?'0'.$i:$i}}:00:00"]').remove();
+                    document.getElementById("start").innerHTML += '<option value="{{ $i<10 ? '0'.$i : $i }}:00:00">{{$i}} - {{$i+1}}</option>'
+                    @endfor
+
+                    //FUNCION QUE DESACTIVA HORAS YA APARTADA
+                    @foreach($court->events as $event)
+                    if (convinado == '{{$event->start->format('Y-m-d')}}' && hora != '{{$event->start->format('H:i:s')}}'){
+                        $('#start option[value="{{$event->start->format('H:i:s')}}"]').remove();
+                    }
+                    @endforeach
 
                     $('#txtid').val(info.event.id);
                     $('#txtFecha').val(anio+"-"+mes+"-"+dia);
@@ -178,7 +205,7 @@
             });
 
             $('#btnModificar').click(function (){
-                objEvento = recolectarDatosGui("PATCH");
+                objEvento = recolectarDatosGui("PUT");
                 Enviarinformacion("/"+$('#txtid').val(),objEvento);
             });
 
@@ -201,13 +228,21 @@
                     url:'/events/{{ $court->url }}'+accion,
                     data: objEvento,
                     success: function (msg){
-                        console.log(msg);
 
                         $('#exampleModal').modal('toggle');
 
                         calendar.refetchEvents();
-                        },
-                    error: function (){alert("Hay un error");},
+
+                    },
+                }).fail(function (jqXHR, textStatus, errorThrown){
+                    if (jqXHR.status === 500){
+                        alert("No estas autorizado para hacer algun cambio en este evento");
+                    }else if (jqXHR.status === 422){
+                        alert("Faltan datos por ingresar");
+                    }
+                    else {
+                        alert("Error");
+                    }
                 });
             }
 

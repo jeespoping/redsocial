@@ -41,6 +41,32 @@ class UsersTableSeeder extends Seeder
             'display_name' => 'Eliminar canchas',
         ]);
 
+        $updateEventsPermission = Permission::create([
+            'name' => 'Update events',
+            'display_name' => 'Actualizar eventos',
+        ]);
+        $deleteEventsPermission = Permission::create([
+            'name' => 'Delete events',
+            'display_name' => 'Eliminar eventos',
+        ]);
+
+        $viewChampionshipsPermission = Permission::create([
+            'name' => 'View championships',
+            'display_name' => 'Ver campeonatos',
+        ]);
+        $createCourtsPermission = Permission::create([
+            'name' => 'Create championships',
+            'display_name' => 'Crear campeonatos',
+        ]);
+        $updateCourtsPermission = Permission::create([
+            'name' => 'Update championships',
+            'display_name' => 'Actualizar campeonatos',
+        ]);
+        $deleteCourtsPermission = Permission::create([
+            'name' => 'Delete championships',
+            'display_name' => 'Eliminar campeonatos',
+        ]);
+
         $admin = new User();
         $admin->name = 'Jesus';
         $admin->first_name = 'Jesus';

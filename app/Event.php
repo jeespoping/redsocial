@@ -11,6 +11,8 @@ class Event extends Model
         'title' , 'description', 'color', 'textColor', 'start', 'end', 'court_id', 'user_id'
     ];
 
+    protected $dates = ['start', 'end'];
+
     public function court(){
         return $this->belongsTo(Court::class);
     }

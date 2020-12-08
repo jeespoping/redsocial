@@ -157,6 +157,8 @@
     @include('admin.courts.create')
 @endunless
 
+
+
 @stack('scripts')
 
 <!-- AdminLTE App -->

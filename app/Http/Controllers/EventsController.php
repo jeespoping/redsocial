@@ -11,6 +11,8 @@ class EventsController extends Controller
 {
     public function store(StoreEventRequest $request, Court $court){
 
+
+
         Event::create([
             'title' => $request->get('title'),
             'description' => $request->get('description'),
@@ -30,10 +32,13 @@ class EventsController extends Controller
     }
 
     public function destroy(Court $court, Event $event){
+        $this->authorize('delete', $event);
         $event->delete();
     }
 
     public function update(StoreEventRequest $request, Court $court, Event $event){
+        $this->authorize('update', $event);
+
         $respuesta = $event->update([
             'title' => $request->get('title'),
             'description' => $request->get('description'),
