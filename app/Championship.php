@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Championship extends Model
 {
     protected $fillable = [
-        'title', 'body', 'court_id', 'user_id', 'cost'
+        'title', 'body', 'court_id', 'user_id', 'cost', 'status'
     ];
 
     protected static function boot()
@@ -16,6 +16,7 @@ class Championship extends Model
 
         static::deleting(function($shampionship){
             $shampionship->photoos->each->delete();
+            $shampionship->teams->each->delete();
         });
     }
 
@@ -34,13 +35,18 @@ class Championship extends Model
         return $this->hasMany(Photoo::class);
     }
 
+    public function teams()
+    {
+        return $this->hasMany(Team::class);
+    }
+
     public function owner()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
     public function scopePublished($query){
-        $query->with(['owner', 'court', 'photos'])->whereNotNull('court_id');
+        $query->with(['owner', 'court', 'photoos'])->whereNotNull('court_id');
     }
 
     public function scopeAllowed($query)
@@ -84,12 +90,12 @@ class Championship extends Model
     // para mostrar si uun campeonato no tiene fotos o tiene mucha o tiene una sola
     public function viewType()
     {
-        if ($this->photos->count() === 1):
-            return 'shampions.photo';
-        elseif($this->photos->count() > 1):
-            return 'shampions.carousel';
+        if ($this->photoos->count() === 1):
+            return 'championships.photoo';
+        elseif($this->photoos->count() > 1):
+            return 'championships.carousel';
         else:
-            return 'shampions.text';
+            return 'championships.text';
         endif;
     }
 

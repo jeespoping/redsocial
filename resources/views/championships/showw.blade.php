@@ -4,29 +4,62 @@
     <div class="mx-5">
         <div class="row">
 
-{{--            Mostrador de la cancha--}}
+            {{--            Mostrador de la cancha--}}
             <div class="col">
                 <div class="card mb-3">
-                    @include( $court->viewType() )
+                    @include( $championship->viewType() )
                     <div class="card-body">
-                        <h5 class="card-title">{{ $court->title }}</h5>
-                        <h4 class="card-subtitle mb-2 text-muted text-primary">$ {{ $court->cost === 0 ? 'Gratis' : $court->cost }}</h4>
-                        <p class="card-text">{!! $court->body !!}</p>
+                        <h5 class="card-title">{{ $championship->title }}</h5>
+                        <p class="card-text">{!! $championship->body !!}</p>
                     </div>
                 </div>
             </div>
 
-
-            <div class="col-md-8">
+            <div class="col">
                 <div class="box box-primary">
                     <div class="box-body">
                         <div id='calendar'></div>
                     </div>
                 </div>
             </div>
+
+            @if($championship->status === 'inscription')
+                @if($sheet == 0)
+                    <form action="{{ route('teams.store', $championship) }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="user_id" value="{{auth()->user()->id}}">
+                        <div class="col">
+                            <div class="box box-primary">
+                                <div class="box-header">
+                                    <h1>Inscribir Equipo</h1>
+                                </div>
+                                <div class="box-body">
+                                    <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
+                                        <label >Nombre del equipo</label>
+                                        <input type="text"
+                                               name="name"
+                                               value="{{ old('name') }}"
+                                               class="form-control"
+                                               placeholder="Ingresa aquí el nombre del equipo"
+                                        >
+                                        {!! $errors->first('name', '<span class="help-block">:message</span>') !!}
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-block">Inscribir equipo</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                @else
+                    <div class="col">
+                        <h1>Ya perteneces a un equipo</h1>
+                    </div>
+                @endif
+
+            @endif
         <div>
     </div>
 
+    @can('update',$championship)
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -76,6 +109,9 @@
             </div>
         </div>
     </div>
+
+    @endcan
+
 @stop
 
 @push('styles')
@@ -86,6 +122,7 @@
 @push('scripts')
     <script src="/adminlte/plugins/select2/select2.full.min.js"></script>
     <script src="/js/main.js"></script>
+
     <script>
 
         $(".select2").select2();
@@ -103,17 +140,19 @@
                     end: 'dayGridMonth'
                 },
 
+                @can('update',$championship)
+
                 dateClick:function (info){
 
                     //FUNCION QUE DESACTIVA HORAS YA APARTADA
                     @for($i = 6; $i < 24; $i++)
-                        $('#start option[value="{{$i<10?'0'.$i:$i}}:00:00"]').remove();
-                        document.getElementById("start").innerHTML += '<option value="{{ $i<10 ? '0'.$i : $i }}:00:00">{{$i}} - {{$i+1}}</option>'
+                    $('#start option[value="{{$i<10?'0'.$i:$i}}:00:00"]').remove();
+                    document.getElementById("start").innerHTML += '<option value="{{ $i<10 ? '0'.$i : $i }}:00:00">{{$i}} - {{$i+1}}</option>'
                     @endfor
-                    @foreach($court->events as $event)
-                        if (info.dateStr == '{{$event->start->format('Y-m-d')}}'){
-                            $('#start option[value="{{$event->start->format('H:i:s')}}"]').remove();
-                        }
+                    @foreach($championship->court->events as $event)
+                    if (info.dateStr == '{{$event->start->format('Y-m-d')}}'){
+                        $('#start option[value="{{$event->start->format('H:i:s')}}"]').remove();
+                    }
                     @endforeach
 
                     limpiarFormulario();
@@ -157,7 +196,7 @@
                     @endfor
 
                     //FUNCION QUE DESACTIVA HORAS YA APARTADA
-                    @foreach($court->events as $event)
+                    @foreach($championship->court->events as $event)
                     if (convinado == '{{$event->start->format('Y-m-d')}}' && hora != '{{$event->start->format('H:i:s')}}'){
                         $('#start option[value="{{$event->start->format('H:i:s')}}"]').remove();
                     }
@@ -172,10 +211,10 @@
                     $('#exampleModal').modal('toggle');
                 },
 
-                events: "/events/{{ $court->url }}/show",
+                @endcan
 
+                events: "/events/{{ $championship->court->url }}/show",
 
-                selectable: true,
                 themeSystem: 'bootstrap',
 
                 initialView: 'dayGridMonth',
@@ -186,9 +225,12 @@
 
             calendar.render(); //renderizado
 
+            @can('update',$championship)
+            selectable: true;
+
             $('#btnAgregar').click(function (){
-               objEvento = recolectarDatosGui("POST");
-               Enviarinformacion("",objEvento);
+                objEvento = recolectarDatosGui("POST");
+                Enviarinformacion("/championship",objEvento);
             });
 
             $('#btnBorrar').click(function (){
@@ -217,7 +259,7 @@
             function Enviarinformacion(accion,objEvento){
                 $.ajax({
                     type: 'POST',
-                    url:'/events/{{ $court->url }}'+accion,
+                    url:'/events/{{ $championship->court->url }}'+accion,
                     data: objEvento,
                     success: function (msg){
 
@@ -245,6 +287,7 @@
                 $('#start').val('');
             }
 
+            @endcan
         });
 
     </script>

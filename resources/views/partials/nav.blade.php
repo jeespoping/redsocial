@@ -25,6 +25,8 @@
                     @if(!auth()->user()->hasRole('User'))
                         <li class="nav-item"><a href="{{ route('dashboard') }}" class="nav-link">Administracion</a></li>
                     @endif
+                    <li class="nav-item"><a href="{{ route('championshipss.index') }}" class="nav-link">Campeonatos</a></li>
+                    <li class="nav-item"><a href="{{ route('teams.index') }}" class="nav-link">Equipos</a></li>
                     <li class="nav-item"><a href="{{ route('courtss.index') }}" class="nav-link">Canchas</a></li>
                     <li class="nav-item"><a href="{{ route('friends.index') }}" class="nav-link">Amigos</a></li>
                     <li class="nav-item"><a href="{{ route('accept-friendships.index') }}" class="nav-link">Solicitudes</a></li>

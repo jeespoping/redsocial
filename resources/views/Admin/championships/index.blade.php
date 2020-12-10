@@ -38,11 +38,12 @@
                         <td>{{ $championship->id }}</td>
                         <td>{{ $championship->title }}</td>
                         <td>
-{{--                            <a href="{{ route('championships.show', $championship) }}"--}}
-{{--                               class="btn btn-xs btn-default"--}}
-{{--                               target="_blank"--}}
-{{--                            ><i class="fa fa-eye"></i></a>--}}
-                            {{--                             Editar Canchas--}}
+
+                            <a href="{{ route('admin.statistics.index', $championship) }}"
+                               class="btn btn-xs btn-default"
+                               target="_blank"
+                            ><i class="fa fa-eye"></i></a>
+
                             <a href="{{ route('admin.championships.edit', $championship) }}" class="btn btn-xs btn-info">
                                 <i class="fa fa-pencil"></i>
                             </a>

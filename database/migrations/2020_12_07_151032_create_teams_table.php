@@ -17,7 +17,9 @@ class CreateTeamsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name')->unique();
             $table->unsignedInteger('championship_id');
+            $table->unsignedInteger('user_id')->unique();
 
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

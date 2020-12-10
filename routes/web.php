@@ -5,8 +5,20 @@ Route::view('/', 'welcome')->name('home');
 Route::get('canchas', 'CourtsController@index')->name('courtss.index')->middleware('auth');
 Route::get('canchas/{court}', 'CourtsController@show')->name('courts.show')->middleware('auth');
 
+Route::get('campeonatos', 'ChampionshipsController@index')->name('championshipss.index')->middleware('auth');
+Route::get('campeonatos/{championship}', 'ChampionshipsController@show')->name('championships.show')->middleware('auth');
+
+Route::post('campeonatos/{championship}/equipos', 'TeamsController@store')->name('teams.store')->middleware('auth');
+Route::get('campeonatos/equipos/{team}', 'TeamsController@show')->name('teams.show')->middleware('auth');
+Route::get('equipos', 'TeamsController@index')->name('teams.index')->middleware('auth');
+
+Route::post('planilla/{team}', 'SheetsController@store')->name('sheets.store')->middleware('auth');
+Route::delete('planilla/{sheet}/{team}', 'SheetsController@destroy')->name('sheets.destroy')->middleware('auth');
+
+
 Route::get('events/{court}/show', 'EventsController@show')->name('events.show')->middleware('auth');
 Route::post('events/{court}', 'EventsController@store')->name('events.store')->middleware('auth');
+Route::post('events/{court}/championship', 'EventsController@storec')->name('events.storec')->middleware('auth');
 Route::delete('events/{court}/{event}', 'EventsController@destroy')->name('events.destroy')->middleware('auth');
 Route::put('events/{court}/{event}', 'EventsController@update')->name('events.update')->middleware('auth');
 
@@ -66,6 +78,10 @@ Route::group([
 
         Route::post('courts/{court}/photos', 'PhotosController@store')->name('admin.courts.photos.store');
         Route::delete('photos/{photo}', 'PhotosController@destroy')->name('admin.photos.destroy');
+
+        Route::get('championships/{championship}','StatisticsController@index')->name('admin.statistics.index');
+        Route::get('championships/{championship}/{team}', 'StatisticsController@edit')->name('admin.statistics.edit');
+        Route::put('championships/{championship}/{team}', 'StatisticsController@update')->name('admin.statistics.update');
 
         Route::post('championships/{championship}/photoos', 'PhotoosController@store')->name('admin.championships.photoos.store');
         Route::delete('photoos/{photoo}', 'PhotoosController@destroy')->name('admin.photoos.destroy');

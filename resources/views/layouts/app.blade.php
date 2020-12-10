@@ -10,12 +10,16 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     @stack('styles')
-    <title>SocialApp</title>
+    <title>{{ config('name') }}</title>
 </head>
 <body>
 
 <div id="app">
     @include('partials.nav')
+
+    @if (session()->has('flash'))
+        <div class="alert alert-success">{{ session('flash') }}</div>
+    @endif
 
     <main class="py-4">
         @yield('content')

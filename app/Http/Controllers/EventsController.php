@@ -12,11 +12,26 @@ class EventsController extends Controller
     public function store(StoreEventRequest $request, Court $court){
 
 
-
         Event::create([
             'title' => $request->get('title'),
             'description' => $request->get('description'),
             'color' => '#1abc9c',
+            'textColor' => '#2c3e50',
+            'start' => Carbon::parse($request->get('start')),
+            'end' => Carbon::parse($request->get('start'))->addHour(),
+            'court_id' => $court->id,
+            'user_id' => auth()->user()->id,
+        ]);
+
+    }
+
+    public function storec(StoreEventRequest $request, Court $court){
+
+
+        Event::create([
+            'title' => $request->get('title'),
+            'description' => $request->get('description'),
+            'color' => '#f39c12',
             'textColor' => '#2c3e50',
             'start' => Carbon::parse($request->get('start')),
             'end' => Carbon::parse($request->get('start'))->addHour(),

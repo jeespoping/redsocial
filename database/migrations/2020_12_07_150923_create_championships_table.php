@@ -20,6 +20,7 @@ class CreateChampionshipsTable extends Migration
             $table->mediumText('body')->nullable();
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('court_id')->nullable();
+            $table->enum('status', ['inscription', 'closing', 'finished'])->default('inscription');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

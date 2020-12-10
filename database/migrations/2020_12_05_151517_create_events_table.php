@@ -20,8 +20,8 @@ class CreateEventsTable extends Migration
             $table->string('color', 20);
             $table->string('textColor', 20);
 
-            $table->timestamp('start')->unique();
-            $table->timestamp('end')->unique();
+            $table->timestamp('start');
+            $table->timestamp('end');
 
             $table->unsignedInteger('court_id');
             $table->unsignedInteger('user_id');

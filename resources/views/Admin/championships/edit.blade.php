@@ -76,7 +76,24 @@
                                     >{{ $court->title }}</option>
                                 @endforeach
                             </select>
-                            {!! $errors->first('category_id', '<span class="help-block">:message</span>') !!}
+                            {!! $errors->first('court_id', '<span class="help-block">:message</span>') !!}
+                        </div>
+
+                        <div class="form-group {{ $errors->has('status') ? 'has-error' : ''}}">
+                            <label>Estado del campeonato</label>
+                            <select name="status" class="form-control select2">
+                                <option value="">Selecciona un estado</option>
+                                    <option value="inscription"
+                                            {{ old('status', $championship->status) == 'inscription' ? 'selected' : '' }}
+                                    >Inscripcion</option>
+                                <option value="closing"
+                                        {{ old('status', $championship->status) == 'closing' ? 'selected' : '' }}
+                                >Cerrado</option>
+                                <option value="closing"
+                                        {{ old('finished', $championship->status) == 'finished' ? 'selected' : '' }}
+                                >Finalizado</option>
+                            </select>
+                            {!! $errors->first('status', '<span class="help-block">:message</span>') !!}
                         </div>
 
                         <div class="form-group">
